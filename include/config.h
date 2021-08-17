@@ -331,6 +331,9 @@
 # ifndef CONF_WITH_NICELINES
 #  define CONF_WITH_NICELINES 0
 # endif
+# ifndef CONF_WITH_UNDERLINED_TITLES
+#  define CONF_WITH_UNDERLINED_TITLES 0
+# endif
 # ifndef CONF_WITH_DESKTOP_CONFIG
 #  define CONF_WITH_DESKTOP_CONFIG 0
 # endif
@@ -1688,6 +1691,14 @@
  */
 #ifndef CONF_WITH_SIZE_TO_FIT
 # define CONF_WITH_SIZE_TO_FIT 1
+#endif
+
+/*
+ * Set CONF_WITH_UNDERLINED_TITLES to 1 to support underlined STRINGS
+ * (dialog titles) like MagiC and XaAES.
+ */
+#ifndef CONF_WITH_UNDERLINED_TITLES
+# define CONF_WITH_UNDERLINED_TITLES 1
 #endif
 
 /*

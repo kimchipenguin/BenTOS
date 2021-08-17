@@ -1722,10 +1722,16 @@ void centre_title(OBJECT *root)
 
     if ((title->ob_type == G_STRING) && (title->ob_y == gl_hchar))
     {
+#if CONF_WITH_UNDERLINED_TITLES
+        title->ob_x = gl_wchar;
+        title->ob_width = root->ob_width - (gl_wchar * 2);
+        title->ob_state |= WHITEBAK;
+#else
         len = strlen((char *)title->ob_spec) * gl_wchar;
         if (len > root->ob_width)
             len = root->ob_width;
         title->ob_x = (root->ob_width - len) / 2;
+#endif
     }
 }
 

@@ -463,6 +463,49 @@ static BOOL is_dashes(char *s, WORD len)
 }
 #endif
 
+/*
+ *  Checks whether an object is an extended one (Niceline, MagiC/XaAES-style
+ *  radio/check buttons)
+ */
+static WORD is_extended_object(WORD state, WORD obtype, WORD flags)
+{
+    WORD us;
+    us = (state >> 8) & 0xff;
+    if (state & WHITEBAK )
+    { 
+        switch(obtype)
+        {
+            case G_BUTTON:
+               if (us == 0xfe) 
+               {
+                    if (state & CHECKED)
+                        return MX_GROUPBOX2; /* - small letters */
+                    else
+                        return MX_GROUPBOX;  /* - normal */
+               } 
+               else if (us & 0x80)
+               {
+                    if (flags & RBUTTON)
+                    {
+                        if (us == 0xff)
+                            return MX_RADIO;     /* no shortcut */
+                        else
+                            return MX_SCRADIO;   /* with shortcut  */
+                    }
+                    else
+                    {
+                        if (us == 0xff)
+                            return MX_CHECK;     /* no shortcut */
+                        else
+                            return MX_SCCHECK;   /* with shortcut */
+                    }
+                }
+                else if (flags & EXIT)   /* Exit-Knopf */
+                    return MX_SCEXIT;
+        }
+    }
+    return MX_NOTXOBJ;
+}
 
 /*
  *  Routine to draw an object from an object tree.
@@ -470,9 +513,10 @@ static BOOL is_dashes(char *s, WORD len)
 static void just_draw(OBJECT *tree, WORD obj, WORD sx, WORD sy)
 {
     WORD bcol, tcol, ipat, icol, tmode, th;
-    WORD state, obtype, len, flags;
+    WORD state, obtype, len, flags, us;
     LONG spec;
     WORD tmpx, tmpy, tmpth;
+    WORD xobj;
     char ch;
     GRECT t, c;
     TEDINFO edblk;
@@ -489,6 +533,8 @@ static void just_draw(OBJECT *tree, WORD obj, WORD sx, WORD sy)
     if ((flags & HIDETREE) || (spec == -1L))
         return;
 
+    xobj = is_extended_object(state, obtype, flags);
+    us = (state >> 8) & 0xff;
     t.g_x = sx;
     t.g_y = sy;
 
@@ -842,6 +888,17 @@ static void just_draw(OBJECT *tree, WORD obj, WORD sx, WORD sy)
             {
                 gsx_tblt(IBM, tmpx, tmpy, len);
             }
+#if CONF_WITH_UNDERLINED_TITLES
+            if ((obtype == G_STRING) && (state & WHITEBAK))
+            {
+                gsx_attr(FALSE, MD_REPLACE, LBLACK);
+                gsx_cline(t.g_x, t.g_y+t.g_h+2, t.g_x+t.g_w, t.g_y+t.g_h+2);
+#if CONF_WITH_3D_OBJECTS
+                gsx_attr(FALSE, MD_REPLACE, WHITE);
+                gsx_cline(t.g_x, t.g_y+t.g_h+1, t.g_x+t.g_w, t.g_y+t.g_h+1);
+#endif
+            }
+#endif
         }
     }
 

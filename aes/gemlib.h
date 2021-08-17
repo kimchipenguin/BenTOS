@@ -62,6 +62,20 @@ typedef struct moblk
 #define VF_BROKEN   0x0002      /* the window is overlapped, can't be blitted */
 #define VF_ISOPEN   0x0004      /* the window is currently open */
 
+/* Extended "MagiC" objects (cflib) */
+#define MX_NOTXOBJ      0       /* No MagiC objekt */
+#define MX_UNDERLINE    1       /* Title */
+#define MX_RADIO        2       /* Radio without shortcut */
+#define MX_SCRADIO      3       /* Radio with shortcut */
+#define MX_CHECK        4       /* Checkbox without shortcut */
+#define MX_SCCHECK      5       /* Checkbox with shortcut */
+#define MX_SCEXIT       6       /* EXIT with shortcut */
+#define MX_SCSTRING     7       /* String with shortcut */
+#define MX_GROUPBOX     8       /* Group frame */
+#define MX_EDIT3D       9       /* 3D edit field (not implemented) */
+#define MX_GROUPBOX2   10       /* Group frame, small font */
+#define MX_NICELINE    11       /* Niceline */
+
 /* the AES window structure */
 typedef struct window
 {
